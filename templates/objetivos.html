@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingresos - HomeBase</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">   
+</head>
+<body>
+    <header>
+        <h1>🏠 HomeBase</h1>
+        <p> Tu gestor familiar inteligente</p>
+    </header>
+        <nav>
+            <a href="/">Inicio </a>
+            <a href="/gastos">💰Gastos</a>
+            <a href="/ingresos">💵Ingresos</a>
+            <a href="/agenda">📅Agenda</a>
+            <a href="/objetivos">🎯Objetivos</a>
+            <a href="/familia">👩🏻‍👩🏻‍👧🏻‍👦🏻Familia</a>
+        </nav>
+    <main>
+        <h2>🎯 Objetivos de ahorro</h2>
+        <form class="formulario" method="POST" action="/objetivos">
+            <input type="text" name="nombre" placeholder="Nombre del objetivo" required>
+            <input type="text" name="descripcion" placeholder="Descripción (opcional)" >
+            <input type="number" name="importe_total" placeholder="Importe total en €" step="0.01" required>
+            <input type="date" name="fecha_limite" required>
+            <input type="text" name="emoji" placeholder="Emoji (ej: 🛩️🏖️)"maxlength="5">
+            <button type="submit">Añadir objetivo</button>
+        </form>
+
+        <div class="lista-objetivos">
+            <h3>Mis objetivos</h3>
+            {% if objetivos %}
+                {% for objetivo in objetivos %}
+                <div class="objetivo-header">
+                    <span class="objetivo-emoji">{{ objetivo['emoji'] }}</span>
+                    <span class="objetivo-nombre">{{ objetivo['nombre'] }}</span>
+                    <span class="objetivo-fecha">📅 {{ objetivo['fecha_limite'] }}</span>
+                    <a href="/objetivos/borrar/{{ objetivo['id'] }}" class="btn-borrar" onclick="return confirm('¿Seguro?')">Borrar</a>
+                </div>
+                 <div class="objetivo-desc">{{ objetivo['descripcion'] }}</div>
+                    <div class="progreso-barra-fondo">
+                        <div class="progreso-barra" style="width: {{ [[(objetivo['importe_actual'] / objetivo['importe_total'] * 100), 0]|max, 100]|min }}%"></div>
+                    </div>
+                    <div class="objetivo-importes">
+                        <span>{{ objetivo['importe_actual'] }}€ ahorrado</span>
+                        <span>Meta: {{ objetivo['importe_total'] }}€</span>
+                    </div>
+                    <form method="POST" action="/objetivos/abonar/{{ objetivo['id'] }}" class="formulario-abonar">
+                        <input type="number" name="importe" placeholder="Añadir €" step="0.01" required>
+                        <button type="submit">Abonar</button>
+                    </form>
+                </div>
+                    {% endfor %}
+            {% else %}
+                <p>No hay objetivos registrados.</p>   
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

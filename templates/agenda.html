@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingresos - HomeBase</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🏠 HomeBase</h1>
+        <p> Tu gestor familiar inteligente</p>
+    </header>
+        <nav>
+            <a href="/">Inicio </a>
+            <a href="/gastos">💰Gastos</a>
+            <a href="/ingresos">💵Ingresos</a>
+            <a href="/agenda">📅Agenda</a>
+            <a href="#">🎯Objetivos</a>
+            <a href="#">👩🏻‍👩🏻‍👧🏻‍👦🏻Familia</a>
+        </nav>
+    <main>
+        <h2>📅 Agenda Familiar</h2>
+        <form class="formulario" method="POST" action="/agenda">
+            <input type="text" name="titulo" placeholder="Título del evento" required>
+            <input type="text" name="descripcion" placeholder="Descripción del evento" >
+            <input type="date" name="fecha" required>
+            <input type="time" name="hora" required>
+            <select name="categoria" required>
+                <option value="">--Categoría--</option>
+                <option value="medico">🏥Médico</option>
+                <option value="colegio">📚Colegio</option>
+                <option value="trabajo">💼Trabajo</option>
+                <option value="hogar">🏠Hogar</option>
+                <option value="ocio">🎉Ocio</option>
+                <option value="otros">📦Otros</option>
+            </select>
+            <button type="submit">Añadir evento</button>
+        </form>
+
+        <div class="lista-agenda">
+            <h3>Próximos eventos</h3>
+            {% if eventos %}
+                {% for evento in eventos %}
+                <div class="evento-item">
+                    <span class="evento-titulo">{{ evento ['titulo']}}</span>
+                    <span class="evento-cat">{{ evento ['categoria']}}</span>
+                    <span class="evento-fecha">{{ evento ['fecha']}} {{ evento['hora']}}</span>
+                    <span class="evento-desc">{{ evento ['descripcion']}}</span>
+                    <a href="/agenda/borrar/{{ evento['id']}}" class="btn-borrar" onclick="return confirm('¿Estás seguro de que quieres eliminar este evento?');">Borrar</a>
+                </div>
+                    {% endfor %}
+            {% else %}
+                <p>No hay eventos registrados.</p>   
+            {% endif %}

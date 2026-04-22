@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Gastos - HomeBase</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🏠 HomeBase</h1>
+        <p> Tu gestor familiar inteligente</p>
+    </header>
+    <nav>
+        <a href="/">Inicio </a>
+        <a href="/gastos">💰Gastos</a>
+        <a href="#">💵Ingresos</a>
+        <a href="#">📅Agenda</a>
+        <a href="#">🎯Objetivos</a>
+        <a href="#">👩🏻‍👩🏻‍👧🏻‍👦🏻Familia</a>
+    </nav>
+    <main>
+        <h2>💰Registro de Gastos</h2>
+        <form class="formulario" method="POST" action="/gastos">
+            <input type="text" name="descripcion" placeholder="Descripción del gasto" required>
+            <input type="number" name="importe" placeholder="Importe en €" step="0.01" required>
+            <select name="categoria" required>
+                <option value="">--Categoría--</option>
+                <option value="alimentacion">🍎 Alimentación</option>
+                <option value="transporte">🚗 Transporte</option>
+                <option value="hogar">🏠 Hogar</option>
+                <option value="ocio">🎉 Ocio</option>
+                <option value="salud">💊 Salud</option>
+                <option value="otros">📦 Otros</option>
+            </select>
+            <button type="submit">Añadir gasto</button>
+        </form>
+
+        <div class="lista-gastos">
+            <h3>Gastos registrados</h3>
+            {% if gastos %}
+                {% for gasto in gastos %}
+                <div class="gasto-item">
+                    <span class="gasto-desc">{{ gasto ['descripcion']}}</span>
+                    <span class="gasto-cat">{{ gasto ['categoria']}}</span>
+                    <span class="gasto-fecha">{{ gasto ['fecha']}}</span>
+                    <span class="gasto-importe">{{ gasto ['importe']}}</span>
+                    <a href="/gastos/borrar/{{ gasto['id']}}" class="btn-borrar" onclick="return confirm('¿Estás seguro de que quieres eliminar este gasto?');">Borrar</a>
+                </div>
+                    {% endfor %}
+            {% else %}
+                <p>No hay gastos registrados.</p>   
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

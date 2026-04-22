@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ingresos - HomeBase</title> 
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🏠 HomeBase</h1>
+        <p> Tu gestor familiar inteligente</p>
+    </header>
+        <nav>
+            <a href="/">Inicio </a>
+            <a href="/gastos">💰Gastos</a>
+            <a href="/ingresos">💵Ingresos</a>
+            <a href="#">📅Agenda</a>
+            <a href="#">🎯Objetivos</a>
+            <a href="#">👩🏻‍👩🏻‍👧🏻‍👦🏻Familia</a>
+        </nav>
+    <main>
+        <h2> 💵 Registro de ingreso</h2>
+        <form class="formulario" method="POST" action="/ingresos">
+            <input type="text" name="descripcion" placeholder="Descripción del ingreso" required>
+            <input type="number" name="importe" placeholder="Importe en €" step="0.01" required>
+            <select name="categoria" required>
+                    <option value="">--Categoría</option>
+                    <option value="sueldo">💰 Sueldo</option>
+                    <option value="freelance">💻 Freelance</option>
+                    <option value="ayuda">🤝 Ayuda</option>
+                    <option value="otros">📦 Otros</option>
+                </select>
+            </div>
+            <button type="submit">Añadir ingreso</button>
+        </form>
+
+        <div class="lista-ingresos">
+            <h3>Ingresos registrados</h3>
+            {% if ingresos %}
+                {% for ingreso in ingresos %}
+                <div class="ingreso-item">
+                    <span class="ingreso-desc">{{ ingreso ['descripcion']}}</span>
+                    <span class="ingreso-cat">{{ ingreso ['categoria']}}</span>
+                    <span class="ingreso-fecha">{{ ingreso ['fecha']}}</span>
+                    <span class="ingreso-importe">{{ ingreso ['importe']}}</span>
+                    <a href="/ingresos/borrar/{{ ingreso['id']}}" class="btn-borrar" onclick="return confirm('¿Estás seguro de que quieres eliminar este ingreso?');">Borrar</a>
+                </div>
+                    {% endfor %}
+            {% else %}
+                <p>No hay ingresos registrados.</p>   
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

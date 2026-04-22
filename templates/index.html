@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>HomeBase</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🏠HomeBase</h1>
+        <p>Tu gestor familiar inteligente </p>
+    </header>
+    
+    <nav>
+    <a href="/">🏠 Inicio</a>
+    <a href="/gastos">💰 Gastos</a>
+    <a href="/ingresos">💵 Ingresos</a>
+    <a href="/agenda">📅 Agenda</a>
+    <a href="/objetivos">🎯 Objetivos</a>
+    <a href="/familia">👨‍👩‍👧 Familia</a>
+</nav>
+    <main>
+        <h2>Resumen del hogar</h2>
+       <div class="tarjetas">
+            <div class="tarjeta">
+                <h3>💵 Ingresos</h3>
+                <p class="cantidad">0,00€</p>
+                <p> este mes</p>
+            </div>
+
+        <div class="tarjeta">
+                <h3>💰 Gastos</h3>
+                <p class="cantidad">0,00€</p>
+                <p> este mes</p>
+           
+        </div>
+            <div class="tarjeta">
+                <h3>🏦 Balance</h3>
+                <p class="cantidad">0,00€</p>
+                <p> disponible</p>
+            </div>
+
+        <div class="tarjeta">
+                <h3>🎯 Objetivos</h3>
+                <p class="cantidad">0</p>
+                <p> en curso</p>
+        </div>
+    </div>
+    </main>
+</body>
+</html>

@@ -7,45 +7,126 @@
 </head>
 <body>
     <header>
-        <h1>🏠HomeBase</h1>
-        <p>Tu gestor familiar inteligente </p>
+        <h1>🏠 HomeBase</h1>
+        <p>Tu gestor familiar inteligente</p>
     </header>
-    
     <nav>
-    <a href="/">🏠 Inicio</a>
-    <a href="/gastos">💰 Gastos</a>
-    <a href="/ingresos">💵 Ingresos</a>
-    <a href="/agenda">📅 Agenda</a>
-    <a href="/objetivos">🎯 Objetivos</a>
-    <a href="/familia">👨‍👩‍👧 Familia</a>
-</nav>
+        <a href="/">🏠 Inicio</a>
+        <a href="/gastos">💰 Gastos</a>
+        <a href="/ingresos">💵 Ingresos</a>
+        <a href="/agenda">📅 Agenda</a>
+        <a href="/objetivos">🎯 Objetivos</a>
+        <a href="/familia">👨‍👩‍👧 Familia</a>
+    </nav>
     <main>
         <h2>Resumen del hogar</h2>
-       <div class="tarjetas">
+        <div class="tarjetas">
             <div class="tarjeta">
                 <h3>💵 Ingresos</h3>
                 <p class="cantidad">0,00€</p>
-                <p> este mes</p>
+                <p>este mes</p>
             </div>
-
-        <div class="tarjeta">
+            <div class="tarjeta">
                 <h3>💰 Gastos</h3>
                 <p class="cantidad">0,00€</p>
-                <p> este mes</p>
-           
-        </div>
+                <p>este mes</p>
+            </div>
             <div class="tarjeta">
                 <h3>🏦 Balance</h3>
                 <p class="cantidad">0,00€</p>
-                <p> disponible</p>
+                <p>disponible</p>
             </div>
-
-        <div class="tarjeta">
+            <div class="tarjeta">
                 <h3>🎯 Objetivos</h3>
                 <p class="cantidad">0</p>
-                <p> en curso</p>
+                <p>en curso</p>
+            </div>
         </div>
-    </div>
+        <div class="calendario-wrap">
+            <div class="cal-header">
+                <button onclick="cambiarMes(-1)">◀</button>
+                <span id="cal-titulo"></span>
+                <button onclick="cambiarMes(1)">▶</button>
+            </div>
+            <div class="cal-dias-semana">
+                <span>Lun</span><span>Mar</span><span>Mié</span>
+                <span>Jue</span><span>Vie</span><span>Sáb</span><span>Dom</span>
+            </div>
+            <div class="cal-grid" id="cal-grid"></div>
+            <div class="cal-leyenda">
+                <span class="leyenda-item" style="background:#e74c3c">🏥 Médico</span>
+                <span class="leyenda-item" style="background:#f39c12">🎒 Colegio</span>
+                <span class="leyenda-item" style="background:#2c7be5">💼 Trabajo</span>
+                <span class="leyenda-item" style="background:#27ae60">🏠 Hogar</span>
+                <span class="leyenda-item" style="background:#9b59b6">🎉 Ocio</span>
+                <span class="leyenda-item" style="background:#888">📦 Otros</span>
+            </div>
+        </div>
     </main>
+    <script>
+    const eventos = {{ eventos_json | safe }};
+    const colores = {
+        medico: '#e74c3c',
+        colegio: '#f39c12',
+        trabajo: '#2c7be5',
+        hogar: '#27ae60',
+        ocio: '#9b59b6',
+        otros: '#888'
+    };
+
+    let hoy = new Date();
+    let mesActual = hoy.getMonth();
+    let anioActual = hoy.getFullYear();
+
+    function cambiarMes(dir) {
+        mesActual += dir;
+        if (mesActual > 11) { mesActual = 0; anioActual++; }
+        if (mesActual < 0) { mesActual = 11; anioActual--; }
+        renderCalendario();
+    }
+
+    function renderCalendario() {
+        const meses = ['Enero','Febrero','Marzo','Abril','Mayo','Junio',
+                       'Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+        document.getElementById('cal-titulo').textContent = meses[mesActual] + ' ' + anioActual;
+
+        const grid = document.getElementById('cal-grid');
+        grid.innerHTML = '';
+
+        const primerDia = new Date(anioActual, mesActual, 1);
+        let diaSemana = primerDia.getDay();
+        diaSemana = diaSemana === 0 ? 6 : diaSemana - 1;
+
+        for (let i = 0; i < diaSemana; i++) {
+            grid.innerHTML += '<div class="cal-dia vacio"></div>';
+        }
+
+        const diasMes = new Date(anioActual, mesActual + 1, 0).getDate();
+
+        for (let d = 1; d <= diasMes; d++) {
+            const fecha = anioActual + '-' +
+                String(mesActual + 1).padStart(2, '0') + '-' +
+                String(d).padStart(2, '0');
+
+            const esHoy = d === hoy.getDate() && mesActual === hoy.getMonth() && anioActual === hoy.getFullYear();
+
+            let puntosHTML = '';
+            if (eventos[fecha]) {
+                eventos[fecha].forEach(cat => {
+                    const color = colores[cat] || '#888';
+                    puntosHTML += `<span class="cal-punto" style="background:${color}"></span>`;
+                });
+            }
+
+            grid.innerHTML += `
+                <div class="cal-dia ${esHoy ? 'hoy' : ''}">
+                    <span class="cal-num">${d}</span>
+                    <div class="cal-puntos">${puntosHTML}</div>
+                </div>`;
+        }
+    }
+
+    renderCalendario();
+    </script>
 </body>
 </html>

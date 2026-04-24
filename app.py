@@ -11,7 +11,18 @@ def get_db():
 
 @app.route('/')
 def inicio():
-    return render_template('index.html')
+    conn = get_db()
+    eventos = conn.execute('SELECT fecha, categoria FROM agenda').fetchall()
+    conn.close()
+    eventos_dict = {}
+    for e in eventos:
+        fecha = e['fecha']
+        cat = e['categoria']
+        if fecha not in eventos_dict:
+            eventos_dict[fecha] = []
+        eventos_dict[fecha].append(cat)
+    import json
+    return render_template('index.html', eventos_json=json.dumps(eventos_dict))
 @app.route('/gastos', methods=['GET', 'POST'])
 def gastos():
     if request.method == 'POST':

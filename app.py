@@ -12,8 +12,24 @@ def get_db():
 @app.route('/')
 def inicio():
     conn = get_db()
+    
+    total_ingresos = conn.execute(
+        "SELECT COALESCE(SUM(importe), 0) FROM ingresos WHERE strftime('%Y-%m', fecha) = strftime('%Y-%m', 'now')"
+    ).fetchone()[0]
+    
+    total_gastos = conn.execute(
+        "SELECT COALESCE(SUM(importe), 0) FROM gastos WHERE strftime('%Y-%m', fecha) = strftime('%Y-%m', 'now')"
+    ).fetchone()[0]
+    
+    balance = total_ingresos - total_gastos
+    
+    total_objetivos = conn.execute(
+        "SELECT COUNT(*) FROM objetivos"
+    ).fetchone()[0]
+    
     eventos = conn.execute('SELECT fecha, categoria FROM agenda').fetchall()
     conn.close()
+    
     eventos_dict = {}
     for e in eventos:
         fecha = e['fecha']
@@ -21,8 +37,15 @@ def inicio():
         if fecha not in eventos_dict:
             eventos_dict[fecha] = []
         eventos_dict[fecha].append(cat)
+    
     import json
-    return render_template('index.html', eventos_json=json.dumps(eventos_dict))
+    return render_template('index.html',
+        eventos_json=json.dumps(eventos_dict),
+        total_ingresos=round(total_ingresos, 2),
+        total_gastos=round(total_gastos, 2),
+        balance=round(balance, 2),
+        total_objetivos=total_objetivos
+    )
 @app.route('/gastos', methods=['GET', 'POST'])
 def gastos():
     if request.method == 'POST':

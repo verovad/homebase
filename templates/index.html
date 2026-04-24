@@ -23,22 +23,22 @@
         <div class="tarjetas">
             <div class="tarjeta">
                 <h3>💵 Ingresos</h3>
-                <p class="cantidad">0,00€</p>
+                <p class="cantidad">{{ total_ingresos }}€</p>
                 <p>este mes</p>
             </div>
             <div class="tarjeta">
                 <h3>💰 Gastos</h3>
-                <p class="cantidad">0,00€</p>
+                <p class="cantidad">{{ total_gastos }}€</p>
                 <p>este mes</p>
             </div>
             <div class="tarjeta">
                 <h3>🏦 Balance</h3>
-                <p class="cantidad">0,00€</p>
+                <p class="cantidad" style="color: {{ 'green' if balance >= 0 else '#e74c3c' }}">{{ balance }}€</p>
                 <p>disponible</p>
             </div>
             <div class="tarjeta">
                 <h3>🎯 Objetivos</h3>
-                <p class="cantidad">0</p>
+                <p class="cantidad">{{ total_objetivos }}</p>
                 <p>en curso</p>
             </div>
         </div>

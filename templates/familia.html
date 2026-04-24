@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Familia - HomeBase</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/estilo.css') }}">
+</head>
+<body>
+    <header>
+        <h1>🏠 HomeBase</h1>
+        <p>Tu gestor familiar inteligente</p>
+    </header>
+    <nav>
+        <a href="/">🏠 Inicio</a>
+        <a href="/gastos">💰 Gastos</a>
+        <a href="/ingresos">💵 Ingresos</a>
+        <a href="/agenda">📅 Agenda</a>
+        <a href="/objetivos">🎯 Objetivos</a>
+        <a href="/familia">👨‍👩‍👧 Familia</a>
+    </nav>
+    <main>
+        <h2>👨‍👩‍👧 Miembros del hogar</h2>
+        <form class="formulario" method="POST" action="/familia">
+            <input type="text" name="nombre" placeholder="Nombre" required>
+            <select name="rol" required>
+                <option value="">-- Rol --</option>
+                <option value="Padre">👨 Padre</option>
+                <option value="Madre">👩 Madre</option>
+                <option value="Hijo">👦 Hijo</option>
+                <option value="Hija">👧 Hija</option>
+                <option value="Abuelo">👴 Abuelo</option>
+                <option value="Abuela">👵 Abuela</option>
+                <option value="Otro">🧑 Otro</option>
+            </select>
+            <input type="text" name="avatar" placeholder="Avatar emoji (ej: 👩 👦 👴)" maxlength="5">
+            <input type="color" name="color" value="#2c7be5">
+            <button type="submit">Añadir miembro</button>
+        </form>
+
+        <div class="lista-familia">
+            <h3>Miembros</h3>
+            {% if miembros %}
+                <div class="familia-grid">
+                {% for m in miembros %}
+                    <div class="miembro-card" style="border-top: 4px solid {{ m['color'] }}">
+                        <div class="miembro-avatar">{{ m['avatar'] }}</div>
+                        <div class="miembro-nombre">{{ m['nombre'] }}</div>
+                        <div class="miembro-rol">{{ m['rol'] }}</div>
+                        <a href="/familia/borrar/{{ m['id'] }}" class="btn-borrar" onclick="return confirm('¿Seguro?')">Borrar</a>
+                    </div>
+                {% endfor %}
+                </div>
+            {% else %}
+                <p>No hay miembros registrados todavía.</p>
+            {% endif %}
+        </div>
+    </main>
+</body>
+</html>

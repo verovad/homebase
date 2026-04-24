@@ -35,6 +35,14 @@ def init_db():
             fecha_limite TEXT,
             emoji TEXT)''')
 
+    cursor.execute('''CREATE TABLE IF NOT EXISTS familia(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            rol TEXT NOT NULL,
+            avatar TEXT,
+            color TEXT)''')
+
+
     conn.commit()
     conn.close()
 

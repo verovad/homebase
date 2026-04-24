@@ -137,5 +137,30 @@ def abonar_objetivo(id):
     conn.commit()
     conn.close()
     return redirect(url_for('objetivos'))
+@app.route('/familia', methods=['GET', 'POST'])
+def familia():
+    if request.method == 'POST':
+        nombre = request.form['nombre']
+        rol = request.form['rol']
+        avatar = request.form['avatar']
+        color = request.form['color']
+        conn = get_db()
+        conn.execute('INSERT INTO familia(nombre, rol, avatar, color) VALUES (?, ?, ?, ?)',
+                     (nombre, rol, avatar, color))
+        conn.commit()
+        conn.close()
+        return redirect(url_for('familia'))
+    conn = get_db()
+    miembros = conn.execute('SELECT * FROM familia').fetchall()
+    conn.close()
+    return render_template('familia.html', miembros=miembros)
+
+@app.route('/familia/borrar/<int:id>')
+def borrar_miembro(id):
+    conn = get_db()
+    conn.execute('DELETE FROM familia WHERE id = ?', (id,))
+    conn.commit()
+    conn.close()
+    return redirect(url_for('familia'))
 if __name__ == '__main__':
     app.run(debug=True)

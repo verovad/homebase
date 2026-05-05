@@ -13,10 +13,10 @@
     <nav>
         <a href="/">Inicio </a>
         <a href="/gastos">💰Gastos</a>
-        <a href="#">💵Ingresos</a>
-        <a href="#">📅Agenda</a>
-        <a href="#">🎯Objetivos</a>
-        <a href="#">👩🏻‍👩🏻‍👧🏻‍👦🏻Familia</a>
+        <a href="/ingresos">💵Ingresos</a>
+        <a href="/agenda">📅Agenda</a>
+        <a href="/objetivos">🎯Objetivos</a>
+        <a href="/familia">👩🏻‍👩🏻‍👧🏻‍👦🏻Familia</a>
     </nav>
     <main>
         <h2>💰Registro de Gastos</h2>
@@ -51,6 +51,37 @@
                 <p>No hay gastos registrados.</p>   
             {% endif %}
         </div>
+        <div class="grafica-wrap">
+    <h3>📊 Gastos por categoría</h3>
+    <canvas id="graficaGastos"></canvas>
+</div>
+
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+<script>
+var categorias = {{ categorias_json | safe }};
+var labels = Object.keys(categorias);
+var datos = Object.values(categorias);
+var colores = ['#2c7be5','#e74c3c','#27ae60','#f39c12','#9b59b6','#888'];
+if (labels.length > 0) {
+    new Chart(document.getElementById('graficaGastos'), {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                data: datos,
+                backgroundColor: colores,
+                borderWidth: 2
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { position: 'bottom' }
+            }
+        }
+    });
+}
+</script>
     </main>
 </body>
 </html>

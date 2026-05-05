@@ -517,3 +517,18 @@ main h2 {
     font-size: 13px;
     color: #888;
 }
+.grafica-wrap {
+    max-width: 400px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+.grafica-wrap h3 {
+    color: #2c7be5;
+    margin-bottom: 16px;
+    font-size: 18px;
+}

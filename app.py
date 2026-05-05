@@ -50,9 +50,9 @@ def inicio():
 def gastos():
     if request.method == 'POST':
         descripcion = request.form['descripcion']
-        importe = (request.form['importe'])
+        importe = request.form['importe']
         categoria = request.form['categoria']
-        fecha= str(date.today())
+        fecha = str(date.today())
         conn = get_db()
         conn.execute('INSERT INTO gastos(descripcion, importe, categoria, fecha) VALUES (?, ?, ?, ?)',
                      (descripcion, importe, categoria, fecha))
@@ -61,9 +61,13 @@ def gastos():
         return redirect(url_for('gastos'))
     conn = get_db()
     lista_gastos = conn.execute('SELECT * FROM gastos ORDER BY fecha DESC').fetchall()
+    categorias = conn.execute(
+        'SELECT categoria, SUM(importe) as total FROM gastos GROUP BY categoria'
+    ).fetchall()
     conn.close()
-    return render_template('gastos.html', gastos=lista_gastos)
-
+    categorias_dict = {row['categoria']: row['total'] for row in categorias}
+    import json
+    return render_template('gastos.html', gastos=lista_gastos, categorias_json=json.dumps(categorias_dict))
 @app.route('/gastos/borrar/<int:id>')
 def borrar_gasto(id):
     conn = get_db()

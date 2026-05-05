@@ -4,8 +4,15 @@ def init_db():
     conn = sqlite3.connect('homebase.db')
     cursor = conn.cursor()
 
+    cursor.execute('''CREATE TABLE IF NOT EXISTS usuarios(
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            email TEXT NOT NULL UNIQUE,
+            password TEXT NOT NULL,
+            nombre TEXT NOT NULL)''')
+
     cursor.execute('''CREATE TABLE IF NOT EXISTS gastos(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
             descripcion TEXT NOT NULL,
             importe REAL NOT NULL,
             categoria TEXT NOT NULL,
@@ -13,6 +20,7 @@ def init_db():
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS ingresos(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
             descripcion TEXT NOT NULL,
             importe REAL NOT NULL,
             categoria TEXT NOT NULL,
@@ -20,6 +28,7 @@ def init_db():
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS agenda(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
             titulo TEXT NOT NULL,
             descripcion TEXT,
             fecha TEXT NOT NULL,
@@ -28,6 +37,7 @@ def init_db():
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS objetivos(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
             nombre TEXT NOT NULL,
             descripcion TEXT,
             importe_total REAL NOT NULL,
@@ -37,11 +47,11 @@ def init_db():
 
     cursor.execute('''CREATE TABLE IF NOT EXISTS familia(
             id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
             nombre TEXT NOT NULL,
             rol TEXT NOT NULL,
             avatar TEXT,
             color TEXT)''')
-
 
     conn.commit()
     conn.close()

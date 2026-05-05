@@ -532,3 +532,14 @@ main h2 {
     margin-bottom: 16px;
     font-size: 18px;
 }
+
+.error-msg {
+    background: #fdecea;
+    color: #e74c3c;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 15px;
+    width: 100%;
+    max-width: 420px;
+}
